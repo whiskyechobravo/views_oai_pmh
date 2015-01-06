@@ -1,0 +1,132 @@
+<?php
+
+/**
+ * @file
+ * The Views OAI-PMH module.
+ */
+
+define('VIEWS_OAI_PMH_TOKEN_LIFETIME', 24*3600);
+
+/**
+ * Implements hook_views_api().
+ */
+function views_oai_pmh_views_api() {
+  return array(
+    'api' => 2,
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function views_oai_pmh_theme() {
+  return array(
+    'views_oai_pmh_response' => array(
+      'variables' => array(
+        'view' => NULL,
+        'options' => NULL,
+        'request' => NULL,
+        'xml' => NULL,
+        'xml_root' => NULL,
+        'xml_verb' => NULL,
+      ),
+      'file' => 'views_oai_pmh.theme.inc',
+    ),
+    'views_oai_pmh_field_mappings_form' => array(
+      'render element' => 'form',
+      'file' => 'views_oai_pmh.theme.inc',
+    ),
+  );
+}
+
+/**
+ * Implements hook_cron().
+ */
+function views_oai_pmh_cron() {
+  views_oai_pmh_garbage_collect();
+}
+
+/**
+ * Flush the cache of resumption tokens.
+ */
+function views_oai_pmh_garbage_collect() {
+  $cache_flush = time() - VIEWS_OAI_PMH_TOKEN_LIFETIME;
+  db_delete('cache_views_oai_pmh')
+    ->condition('expire', $cache_flush, '<=')
+    ->execute();
+}
+
+/**
+ * Implements hook_views_oai_pmh_metadata_format_info().
+ *
+ * Returns the OAI-PMH metadata formats supported by this module.
+ */
+function views_oai_pmh_views_oai_pmh_metadata_format_info() {
+  return array('oai_dc', 'mods', 'oai_lom', 'oai_lre', 'oai_ilox');
+}
+
+/**
+ * Implements hook_views_oai_pmh_metadata_format().
+ *
+ * Instanciates the metadata format object corresponding to the specified
+ * format id.
+ */
+function views_oai_pmh_views_oai_pmh_metadata_format($id) {
+  if (in_array($id, views_oai_pmh_views_oai_pmh_metadata_format_info())) {
+    $class_name = 'views_oai_pmh_format_' . $id;
+    if (class_exists($class_name)) {
+      return new $class_name;
+    }
+  }
+}
+
+/**
+ * Returns the list of metadata formats implemented by all the active modules.
+ *
+ * @param boolean $with_module_names
+ *   If TRUE, returned array will be keyed by format id, and each value will be
+ *   the module implementing the format. Default is FALSE, meaning the returned
+ *   array will only contain format ids (as array values).
+ */
+function views_oai_pmh_list_metadata_formats($with_module_names = FALSE) {
+  $formats = &drupal_static(__FUNCTION__);
+  if (!isset($formats)) {
+    // Query modules for their supported formats. For each format, keep track
+    // of which module provides it.
+    foreach (module_implements('views_oai_pmh_metadata_format_info') as $module) {
+      $hook = $module . '_views_oai_pmh_metadata_format_info';
+      $module_formats = $hook();
+      foreach ($module_formats as $id) {
+        $formats[$id] = $module;
+      }
+    }
+  }
+  if ($with_module_names) {
+    return $formats;
+  }
+  else {
+    return array_keys($formats);
+  }
+}
+
+/**
+ * Returns the metadata format object for a given id.
+ */
+function views_oai_pmh_get_metadata_format($id) {
+  $formats = &drupal_static(__FUNCTION__);
+  if (!isset($formats)) {
+    $formats = array();
+  }
+  if (!isset($formats[$id])) {
+    $format_modules = views_oai_pmh_list_metadata_formats(TRUE);
+    if (isset($format_modules[$id])) {
+      $hook = $format_modules[$id] . '_views_oai_pmh_metadata_format';
+      if (function_exists($hook)) {
+        $formats[$id] = $hook($id);
+      }
+    }
+  }
+  if (isset($formats[$id])) {
+    return $formats[$id];
+  }
+}

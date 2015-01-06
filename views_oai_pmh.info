@@ -1,0 +1,18 @@
+name = Views OAI-PMH
+description = "Views plugins to publish data through the OAI-PMH protocol."
+
+package = Views
+core = 7.x
+
+dependencies[] = views
+files[] = includes/error.inc
+files[] = includes/request.inc
+files[] = includes/format.inc
+files[] = includes/formats/mods.inc
+files[] = includes/formats/oai_dc.inc
+files[] = includes/formats/oai_ilox.inc
+files[] = includes/formats/oai_lom.inc
+files[] = includes/formats/oai_lre.inc
+files[] = plugins/views_oai_pmh_plugin_display.inc
+files[] = plugins/views_oai_pmh_plugin_row_fields.inc
+files[] = plugins/views_oai_pmh_plugin_style.inc
