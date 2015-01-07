@@ -102,6 +102,18 @@ class views_oai_pmh_request {
   }
 
   /**
+   * Returns TRUE if either a 'badVerb' or a 'badArgument' error has occurred.
+   */
+  public function is_bad() {
+    foreach ($this->errors as $error) {
+      if ($error->code == 'badVerb' || $error->code == 'badArgument') {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
    * Parse the given arguments, initializing each argument's corresponding
    * member variable if the argument is valid, or appending an error when it is
    * not.

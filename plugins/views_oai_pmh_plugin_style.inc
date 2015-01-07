@@ -96,6 +96,7 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
     global $base_url;
 
     if (!isset($this->request)) {
+      // Initialize the request from URL arguments.
       $this->request = new views_oai_pmh_request(
         $base_url . base_path() . $this->display->handler->get_path(),
         array_filter($this->options['enabled_formats']),
@@ -117,6 +118,7 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
 
   function render() {
     $this->xml_init();
+    $this->xml_append_request();
 
     // Perform the render action specified by the requested OAI-PMH verb.
     if ($this->request->verb && !$this->request->errors) {
@@ -583,15 +585,23 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
     $this->xml_root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
     $this->xml_root->setAttribute('xsi:schemaLocation', 'http://www.openarchives.org/OAI/2.0/   http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd');
     $this->xml_append_children($this->xml_root, array('responseDate' => $this->request->response_date));
+  }
 
-    // Add request element.
+  /**
+   * Adds a node for the <request> element to the XML document.
+   */
+  protected function xml_append_request() {
     $request_element = $this->xml->createElement('request', $this->request->base_url);
     $this->xml_root->appendChild($request_element);
-    if ($this->request->verb) {
-      $request_element->setAttribute('verb', $this->request->verb);
-    }
-    foreach ($this->request->original_args as $arg => $value) {
-      $request_element->setAttribute($arg, $value);
+
+    // Provide attributes, unless a badVerb or badArgument error has occurred.
+    if (!$this->request->is_bad()) {
+      if ($this->request->verb) {
+        $request_element->setAttribute('verb', $this->request->verb);
+      }
+      foreach ($this->request->original_args as $arg => $value) {
+        $request_element->setAttribute($arg, $value);
+      }
     }
   }
 
