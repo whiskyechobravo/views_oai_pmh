@@ -43,7 +43,7 @@ Changes:
 * Now impossible to disable the oai_dc metadata format, which is required by
   the OAI-PMH standard.
 * New support for the Metadata Object Description Schema (MODS) format.
-* Properly output the view's URL instead of the site's base URL in <request>
+* Properly output the view's URL instead of the site's base URL in `<request>`
   tags.
 * All errors are now detected and reported in the response, as required by the
   OAI-PMH standard, instead of stopping short after the first error. Also
