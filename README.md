@@ -145,8 +145,12 @@ required.
    "dc:date" element.
 10. Configure a path for this display, such as "my-oai-pmh", in the "OAI-PMH
     Settings" section.
-11. Save the view.
-12. Optionally, you can test your new endpoint by going to
+11. In the "Pager" section, make sure to use the "Full" pager. The specified
+    number of items per page will control how many records will appear in an
+    OAI-PMH response (harvesters will make multiple requests using resumption
+    tokens to get more records).
+12. Save the view.
+13. Optionally, you can test your new endpoint by going to
     http://re.cs.uct.ac.za/ and entering the absolute URL for your display,
     e.g. http://example.com/my-oai-pmh, in the "Enter the OAI baseURL" box, and
     then clicking the "Test the specified/selected baseURL" link (on the right
@@ -281,17 +285,17 @@ To generate the above output, the view might have the following three fields
 (again, order is important):
 
 * "Global: Custom text", configured for text "local"
-* "Content: Authors", an Entity Reference field configured with the formatter
-  "URL as plain text", and proper settings for a multivalued field.
-* "Content: Authors", another instance of the same Entity Reference field, this
-  time configured with the formatter "Title (no link)". Also configured with
-  proper settings for a multivalued field.
+* "Content: My author field", an Entity Reference field configured with the
+  formatter "URL as plain text", and proper settings for a multivalued field.
+* "Content: My author field", another instance of the same Entity Reference
+  field, this time configured with the formatter "Title (no link)". Also
+  configured with proper settings for a multivalued field.
 
 Then the view would have the following MODS mappings:
 
 * "Global: Custom text" mapped to "(Attribute) authority"
-* "Content: Authors" mapped to "(Attribute) xlink:href"
-* "Content: Authors" mapped to "name (multiple) > namePart"
+* "Content: My author field" mapped to "(Attribute) xlink:href"
+* "Content: My author field" mapped to "name (multiple) > namePart"
 
 
 ### Default view
