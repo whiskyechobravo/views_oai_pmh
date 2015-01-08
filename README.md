@@ -86,8 +86,7 @@ Installing the module
 ---------------------
 
 To install and enable Views OAI-PMH, please follow the usual [instructions for
-module installation](https://www.drupal.org/documentation/install/modules-
-themes/modules-7).
+module installation](https://www.drupal.org/documentation/install/modules-themes/modules-7).
 
 
 Upgrading from the original Views OAI-PMH
