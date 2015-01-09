@@ -30,8 +30,8 @@ good idea of the problems we wanted to solve.
 
 Changes:
 
-* Simpler architecture. Just two Views plugins (instead of 10): a display
-  plugin and a style plugin.
+* Simpler architecture and less code. Just two Views plugins (instead of 10), a
+  display plugin and a style plugin.
 * No more global variables. Lazy loading of metadata format definitions.
 * Proper hooks for other modules to provide their own metadata formats.
 * Mapping now uses its own settings data structure instead of hijacking a
@@ -56,8 +56,8 @@ Why not publish on Drupal.org?
 
 We will work with the authors of the original Views OAI-PMH. If they like this
 version, perhaps it will replace the original version of the module. In the
-meantime, it will be hosted on GitHub as Drupal.org does not allow multiple
-modules with the same name.
+meantime, it will be hosted on GitHub as Drupal.org does not allow sandbox
+projects with the same name as an existing full project.
 
 
 Missing features
