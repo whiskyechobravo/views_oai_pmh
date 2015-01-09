@@ -189,7 +189,7 @@ The view might use four fields (order is important):
 Then the view would have the following MODS mappings:
 
 * "Global: Custom text" mapped to "(Attribute) authority"
-* "Content: My language field" mapped to "language > languageTerm"
+* "Content: My language field" mapped to "language (multiple) > languageTerm"
 * "Global: Custom text" mapped to "(Attribute) authority"
 * "Content: My author field" mapped to "name (multiple) > namePart"
 

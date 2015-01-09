@@ -242,9 +242,9 @@ class views_oai_pmh_format_mods extends views_oai_pmh_format {
       'identifier' => 'identifier',
 
       // language element.
-      'language' => 'language',
-      'language/languageTerm' => 'language > languageTerm',
-      'language/scriptTerm' => 'language > scriptTerm',
+      'language[]' => 'language (multiple)',
+      'language[]/languageTerm' => 'language (multiple) > languageTerm',
+      'language[]/scriptTerm' => 'language (multiple) > scriptTerm',
 
       // location element.
       'location' => 'location',
