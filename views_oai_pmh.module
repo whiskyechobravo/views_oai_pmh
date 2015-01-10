@@ -123,6 +123,7 @@ function views_oai_pmh_get_metadata_format($id) {
       $hook = $format_modules[$id] . '_views_oai_pmh_metadata_format';
       if (function_exists($hook)) {
         $formats[$id] = $hook($id);
+        drupal_alter('views_oai_pmh_metadata_format', $formats[$id]);
       }
     }
   }

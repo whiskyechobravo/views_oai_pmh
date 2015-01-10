@@ -33,7 +33,8 @@ Changes:
 * Simpler architecture and less code. Just two Views plugins (instead of 10), a
   display plugin and a style plugin.
 * No more global variables. Lazy loading of metadata format definitions.
-* Proper hooks for other modules to provide their own metadata formats.
+* Proper hooks allow modules to provide their own metadata formats, and to
+  alter the metadata formats provided by other modules.
 * Mapping now uses its own settings data structure instead of hijacking a
   view's field labels.
 * Attributes are no longer global to all elements. The same attribute may now
@@ -345,11 +346,20 @@ requires implementing two hooks:
   This hook receives a metadata format identifier as argument and returns an
   instance of the metadata format object corresponding to that id. That
   object's class must be a subclass of the `views_oai_pmh_format` class, which
-  you can find in `includes/format.inc`. You may also want to take a look at
-  the files in `includes/formats` for example implementations.
+  you can find in `includes/format.inc`. Have a look at the `includes/formats`
+  directory for implementation examples.
 
 Views OAI-PMH itself simply implements those two hooks. You can find these
 implementations in `views_oai_pmh.module`.
+
+
+Altering existing metadata formats
+----------------------------------
+
+A module may implement `hook_views_oai_pmh_metadata_format_alter()` to alter
+any of the metadata formats provided by other modules. The function's sole
+argument is an object of class `views_oai_pmh_format`. The implementor may
+check that object's `id` attribute to identify the format.
 
 
 Credits
