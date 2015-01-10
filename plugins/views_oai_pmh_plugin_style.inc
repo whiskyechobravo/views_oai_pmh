@@ -382,6 +382,12 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
         $used_attributes = array();
         $field_value = $this->get_field($row_index, $field_name);
         if ($field->options['exclude'] || empty($mapping) || (empty($field_value) && $field->options['hide_empty'])) {
+          if (!empty($mapping)) {
+            // Eat attributes that would have been consumed by the field's
+            // mapping, had the field not been empty. This prevents attributes
+            // from spilling to subsequent fields they were not intended for.
+            $this->eat_attributes(explode('/', $mapping), $available_attributes);
+          }
           continue; // Skip this field.
         }
 
@@ -482,6 +488,28 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
           }
         }
       }
+    }
+  }
+
+  /**
+   * Check whether any of the available attributes applies to elements in the
+   * given path. Attributes that apply get removed from $available_attributes.
+   */
+  protected function eat_attributes($path, &$available_attributes) {
+    // Loop through all subpaths, starting with the full path.
+    while (!empty($path)) {
+      $subpath = implode('/', $path);
+      // Check if the metadata format supports any attributes on the current path.
+      if (isset($this->request->metadata_format->attributes[$subpath]) && !empty($this->request->metadata_format->attributes[$subpath])) {
+        // Check if any of our available attributes are among those supported by the metadata format.
+        foreach ($available_attributes as $attribute_name => $attribute_field_name) {
+          if (in_array($attribute_name, $this->request->metadata_format->attributes[$subpath])) {
+            // Attribute applies. Let's remove it from the available ones!
+            unset($available_attributes[$attribute_name]);
+          }
+        }
+      }
+      array_pop($path);
     }
   }
 
