@@ -99,8 +99,8 @@ elements will have to be manually redone in the views. Backup your data before
 upgrading!
 
 The structure of the module's theming layer is completely different, so any
-theme code (theme functions or template files) made for the original Views OAI-
-PMH versions will have to be reworked.
+theme code (theme functions or template files) made for the original Views
+OAI-PMH versions will have to be reworked.
 
 
 Using the module
@@ -119,9 +119,9 @@ required.
    name will appear in response to OAI-PMH "Identify" requests.
 5. Add any desired filter criteria. These will limit what content is available
    from your new OAI-PMH endpoint.
-6. Add any fields that provide the data that you wish to publish through OAI-
-   PMH (for example, "Content: Title", "Content: Body", "Content: Post date").
-   Some things to consider when configuring a field:
+6. Add any fields that provide the data that you wish to publish through
+   OAI-PMH (for example, "Content: Title", "Content: Body", "Content: Post
+   date"). Some things to consider when configuring a field:
    * You may uncheck the "Create a label" option, as labels will not be part of
      the OAI-PMH output and will simply be ignored. You may still want to use
      labels for documentation purposes though.
@@ -353,8 +353,8 @@ requires implementing two hooks:
   you can find in `includes/format.inc`. Have a look at the `includes/formats`
   directory for implementation examples.
 
-Views OAI-PMH itself simply implements those two hooks. You can find these
-implementations in `views_oai_pmh.module`.
+Views OAI-PMH itself implements those two hooks to provide its own formats. You
+can find these implementations in `views_oai_pmh.module`.
 
 
 Altering existing metadata formats
@@ -374,9 +374,8 @@ Bravo](http://whiskyechobravo.com/) with sponsorship from the [Consortium on
 Electronic Literature (CELL)](http://eliterature.org/cell/) and [Laboratoire
 NT2](http://nt2.uqam.ca/).
 
-It builds upon prior work, [Views OAI-
-PMH](https://www.drupal.org/project/views_oai_pmh) 7.x-1.x by [Ron
-Jerome](https://www.drupal.org/user/54997), sponsored by the [Minnesota
-Historical Society](http://www.mnhs.org/index.htm), and Views OAI-PMH 7.x-2.x
-by [Austin Goudge](https://www.drupal.org/u/psycleinteractive), sponsored by
-[The Open University](http://www.open.ac.uk/).
+It builds upon prior work, [Views OAI-PMH](https://www.drupal.org/project/views_oai_pmh)
+7.x-1.x by [Ron Jerome](https://www.drupal.org/user/54997), sponsored by the
+[Minnesota Historical Society](http://www.mnhs.org/index.htm), and Views
+OAI-PMH 7.x-2.x by [Austin Goudge](https://www.drupal.org/u/psycleinteractive),
+sponsored by [The Open University](http://www.open.ac.uk/).
