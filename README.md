@@ -98,6 +98,10 @@ Any views created with the original Views OAI-PMH 7.x-1.x or Views OAI-PMH
 elements will have to be manually redone in the views. Backup your data before
 upgrading!
 
+The structure of the module's theming layer is completely different, so any
+theme code (theme functions or template files) made for the original Views OAI-
+PMH versions will have to be reworked.
+
 
 Using the module
 ----------------
