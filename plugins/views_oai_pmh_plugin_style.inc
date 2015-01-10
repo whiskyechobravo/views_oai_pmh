@@ -496,6 +496,10 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
    * given path. Attributes that apply get removed from $available_attributes.
    */
   protected function eat_attributes($path, &$available_attributes) {
+    // Clean path to match format used by metadata_format->attributes keys.
+    foreach (array_keys($path) as $index) {
+      $this->prepare_tag($path[$index]);
+    }
     // Loop through all subpaths, starting with the full path.
     while (!empty($path)) {
       $subpath = implode('/', $path);
@@ -518,7 +522,7 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
    * codes (so it becomes proper for addition to the XML document), and returns
    * an xpath pattern useful to check if the element already exists.
    */
-  protected static function prepare_tag(&$tag, $delta) {
+  protected static function prepare_tag(&$tag, $delta = 0) {
     $matches = array();
     if (preg_match('/^(.+)\[([0-9]+)\]$/', $tag, $matches)) {
       // Mapping element has a '[0-9]' suffix. Use that directly as the xpath.
