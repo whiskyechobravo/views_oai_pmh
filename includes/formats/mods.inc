@@ -117,6 +117,8 @@ class views_oai_pmh_format_mods extends views_oai_pmh_format {
       'recordInfo/recordIdentifier' => array('source', 'lang', 'xml:lang', 'script', 'transliteration'),
       'recordInfo/recordOrigin' => array('lang', 'xml:lang', 'script', 'transliteration'),
       'recordInfo/languageOfCataloging' => array('objectPart', 'usage', 'displayLabel', 'altRepGroup'),
+      'recordInfo/languageOfCataloging/languageTerm' => array('type', 'authority', 'authorityURI', 'valueURI', 'lang', 'xml:lang', 'script', 'transliteration'),
+      'recordInfo/languageOfCataloging/scriptTerm' => array('type', 'authority', 'authorityURI', 'valueURI', 'lang', 'xml:lang', 'script', 'transliteration'),
       'recordInfo/descriptionStandard' => array('authority', 'authorityURI', 'valueURI', 'lang', 'xml:lang', 'script', 'transliteration'),
 
       // relatedItem element.
@@ -321,6 +323,8 @@ class views_oai_pmh_format_mods extends views_oai_pmh_format {
       'recordInfo/recordIdentifier' => 'recordInfo > recordIdentifier',
       'recordInfo/recordOrigin' => 'recordInfo > recordOrigin',
       'recordInfo/languageOfCataloging' => 'recordInfo > languageOfCataloging',
+      'recordInfo/languageOfCataloging/languageTerm' => 'recordInfo > languageOfCataloging > languageTerm',
+      'recordInfo/languageOfCataloging/scriptTerm' => 'recordInfo > languageOfCataloging > scriptTerm',
       'recordInfo/descriptionStandard' => 'recordInfo > descriptionStandard',
 
       // relatedItem element.
