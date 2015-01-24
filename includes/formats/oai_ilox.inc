@@ -8,13 +8,18 @@ class views_oai_pmh_format_oai_ilox extends views_oai_pmh_format {
     parent::__construct('oai_ilox', t('IMS Learning Objects Exchange (ILOX)'));
 
     $this->schema = 'http://www.imsglobal.org/xsd/imsloilox_v1p0_ilox_work_v1p0.xsd';
-    $this->metadata_namespace = 'http://www.imsglobal.org/xsd/lodeilox_v1p0/digital_LO';
+
+    $this->namespaces = array(
+      'xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+      'ilox' => 'http://www.imsglobal.org/xsd/lodeilox_v1p0/digital_LO',
+    );
+    $this->metadata_namespace_prefix = 'ilox';
 
     $this->root_element = 'work';
     $this->root_attributes = array(
-      'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-      'xsi:schemaLocation' => $this->metadata_namespace . '    ' . $this->schema,
-      'xmlns' => $this->metadata_namespace,
+      'xmlns:xsi' => $this->namespaces['xsi'],
+      'xsi:schemaLocation' => $this->namespaces['ilox'] . '    ' . $this->schema,
+      'xmlns' => $this->namespaces['ilox'],
     );
 
     $this->attributes = array(

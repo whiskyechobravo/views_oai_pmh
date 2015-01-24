@@ -8,14 +8,20 @@ class views_oai_pmh_format_mods extends views_oai_pmh_format {
     parent::__construct('mods', t('Metadata Object Description Schema (MODS)'));
 
     $this->schema = 'http://www.loc.gov/standards/mods/v3/mods-3-5.xsd';
-    $this->metadata_namespace = 'http://www.loc.gov/mods/v3';
+
+    $this->namespaces = array(
+      'xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+      'mods' => 'http://www.loc.gov/mods/v3',
+      'xlink' => 'http://www.w3.org/1999/xlink',
+    );
+    $this->metadata_namespace_prefix = 'mods';
 
     $this->root_element = 'mods';
     $this->root_attributes = array(
-      'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-      'xmlns' => $this->metadata_namespace,
-      'xsi:schemaLocation' => $this->metadata_namespace . '    ' . $this->schema,
-      'xmlns:xlink' => 'http://www.w3.org/1999/xlink',
+      'xmlns:xsi' => $this->namespaces['xsi'],
+      'xmlns' => $this->namespaces['mods'],
+      'xsi:schemaLocation' => $this->namespaces['mods'] . '    ' . $this->schema,
+      'xmlns:xlink' => $this->namespaces['xlink'],
     );
 
     $this->attributes = array(

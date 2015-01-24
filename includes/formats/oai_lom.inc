@@ -8,14 +8,20 @@ class views_oai_pmh_format_oai_lom extends views_oai_pmh_format {
     parent::__construct('oai_lom', t('Learning Objects Metadata (LOM)'));
 
     $this->schema = 'http://ltsc.ieee.org/xsd/lomv1.0/lom.xsd';
-    $this->metadata_namespace = 'http://ltsc.ieee.org/xsd/LOM';
+
+    $this->namespaces = array(
+      'xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+      'oai_lom' => 'http://ltsc.ieee.org/xsd/LOM',
+      'lom' => 'http://ltsc.ieee.org/xsd/LOM',
+    );
+    $this->metadata_namespace_prefix = 'oai_lom';
 
     $this->root_element = 'oai_lom:lom';
     $this->root_attributes = array(
-      'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-      'xsi:schemaLocation' => $this->metadata_namespace . '    ' . $this->schema,
-      'xmlns:oai_lom' => $this->metadata_namespace,
-      'xmlns:lom' => $this->metadata_namespace,
+      'xmlns:xsi' => $this->namespaces['xsi'],
+      'xsi:schemaLocation' => $this->namespaces['oai_lom'] . '    ' . $this->schema,
+      'xmlns:oai_lom' => $this->namespaces['oai_lom'],
+      'xmlns:lom' => $this->namespaces['lom'],
     );
 
     $this->attributes = array(

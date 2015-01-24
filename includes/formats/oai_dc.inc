@@ -8,14 +8,20 @@ class views_oai_pmh_format_oai_dc extends views_oai_pmh_format {
     parent::__construct('oai_dc', t('Dublin Core'));
 
     $this->schema = 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd';
-    $this->metadata_namespace = 'http://www.openarchives.org/OAI/2.0/oai_dc/';
+
+    $this->namespaces = array(
+      'xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+      'oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+      'dc' => 'http://purl.org/dc/elements/1.1/',
+    );
+    $this->metadata_namespace_prefix = 'oai_dc';
 
     $this->root_element = 'oai_dc:dc';
     $this->root_attributes = array(
-      'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-      'xsi:schemaLocation' => $this->metadata_namespace . '    ' . $this->schema,
-      'xmlns:oai_dc' => $this->metadata_namespace,
-      'xmlns:dc' => 'http://purl.org/dc/elements/1.1/',
+      'xmlns:xsi' => $this->namespaces['xsi'],
+      'xsi:schemaLocation' => $this->namespaces['oai_dc'] . '    ' . $this->schema,
+      'xmlns:oai_dc' => $this->namespaces['oai_dc'],
+      'xmlns:dc' => $this->namespaces['dc'],
     );
 
     $this->elements = array(

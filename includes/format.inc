@@ -27,11 +27,21 @@ class views_oai_pmh_format {
   public $schema = '';
 
   /**
-   * The metadata namespace for this format.
+   * The XML namespaces required by this metadata format, keyed by namespace
+   * prefix. Even if the XML output uses a default prefix, no key here is
+   * allowed to be empty.
+   *
+   * @var array
+   */
+  public $namespaces = array();
+
+  /**
+   * The prefix of the metadata namespace for this format. Must match a key of
+   * the $namespaces array.
    *
    * @var string
    */
-  public $metadata_namespace = '';
+  public $metadata_namespace_prefix = '';
 
   /**
    * An array describing the attributes that are allowed for each tag of the
@@ -39,7 +49,7 @@ class views_oai_pmh_format {
    *
    * @var array
    */
-  public $attributes;
+  public $attributes = array();
 
   /**
    * An array describing the mapping options, tags or attributes, for use in
@@ -47,7 +57,7 @@ class views_oai_pmh_format {
    *
    * @var array
    */
-  public $elements;
+  public $elements = array();
 
   /**
    * The element that acts as the root of each OAI record in the generated XML.
@@ -57,11 +67,12 @@ class views_oai_pmh_format {
   public $root_element = '';
 
   /**
-   * The attributes to assign to the root tag.
+   * The attributes to assign to the root tag, including XML namespace
+   * attributes.
    *
    * @var array
    */
-  public $root_attributes;
+  public $root_attributes = array();
 
   public function __construct($id, $label) {
     $this->id = $id;
@@ -69,5 +80,9 @@ class views_oai_pmh_format {
     $this->attributes = array();
     $this->elements = array('none' => t('- None -'));
     $this->root_attributes = array();
+  }
+
+  public function get_metadata_namespace() {
+    return $this->namespaces[$this->metadata_namespace_prefix];
   }
 }

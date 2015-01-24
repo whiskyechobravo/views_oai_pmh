@@ -100,7 +100,7 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
       $this->request = new views_oai_pmh_request(
         $base_url . base_path() . $this->display->handler->get_path(),
         array_filter($this->options['enabled_formats']),
-        $this->view->live_preview);
+        isset($this->view->live_preview) && $this->view->live_preview);
     }
 
     // Perform the query action specified by the requested OAI-PMH verb.
@@ -286,7 +286,7 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
       $elements = array(
         'metadataPrefix' => $format->id,
         'schema' => $format->schema,
-        'metadataNamespace' => $format->metadata_namespace,
+        'metadataNamespace' => $format->get_metadata_namespace(),
       );
       $this->xml_append_children($format_element, $elements);
     }
@@ -368,6 +368,14 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
     $metadata_element->appendChild($metadata_root);
     $this->xml_set_attributes($metadata_root, $this->request->metadata_format->root_attributes);
 
+    // Prepare XPath object for later use.
+    $xpath = new DOMXPath($this->xml);
+    foreach ($this->request->metadata_format->namespaces as $namespace_prefix => $namespace_uri) {
+      if (!$xpath->registerNamespace($namespace_prefix, $namespace_uri)) {
+        watchdog('views_oai_pmh', 'Error registering namespace @uri', array('@uri' => $namespace_uri), WATCHDOG_ERROR);
+      }
+    }
+
     // Available attributes, as an array of field ids keyed by attribute name.
     $available_attributes = array();
 
@@ -417,10 +425,9 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
               $element_xpath_pattern = $this->prepare_tag($element, $delta);
 
               // Check if child exists.
-              $xpath = new DOMXPath($this->xml);
               $existing_nodes = $xpath->query($element_xpath_pattern, $parent);
 
-              if ($existing_nodes->length) {
+              if ($existing_nodes !== FALSE && $existing_nodes->length) {
                 // Found an existing node matching the path. No need to create a new one.
                 $element_node = $existing_nodes->item(0);
               }

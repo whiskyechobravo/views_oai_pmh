@@ -8,13 +8,18 @@ class views_oai_pmh_format_oai_lre extends views_oai_pmh_format {
     parent::__construct('oai_lre', t('Learning Resource Exchange (LRE)'));
 
     $this->schema = 'http://fire.eun.org/lode/imslorsltitm_v1p0.xsd';
-    $this->metadata_namespace = 'http://www.imsglobal.org/xsd/imslorsltitm_v1p0';
+
+    $this->namespaces = array(
+      'xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+      'lre' => 'http://www.imsglobal.org/xsd/imslorsltitm_v1p0',
+    );
+    $this->metadata_namespace_prefix = 'lre';
 
     $this->root_element = 'expression';
     $this->root_attributes = array(
-      'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-      'xsi:schemaLocation' => $this->metadata_namespace . '    ' . $this->schema,
-      'xmlns' => $this->metadata_namespace,
+      'xmlns:xsi' => $this->namespaces['xsi'],
+      'xsi:schemaLocation' => $this->namespaces['lre'] . '    ' . $this->schema,
+      'xmlns' => $this->namespaces['lre'],
     );
 
     $this->attributes = array(
