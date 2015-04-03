@@ -17,7 +17,7 @@ function theme_views_oai_pmh_field_mappings_form($variables) {
       drupal_render($variables['form'][$field_name]),
     );
   }
-  $header = array(t('View field'), t('!format element', array('!format' => $variables['form']['#title'])));
+  $header = array(t('View field'), t('Output element'));
   return theme('table', array('header' => $header, 'rows' => $rows));
 }
 
