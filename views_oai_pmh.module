@@ -62,7 +62,7 @@ function views_oai_pmh_garbage_collect() {
  * Returns the OAI-PMH metadata formats supported by this module.
  */
 function views_oai_pmh_views_oai_pmh_metadata_format_info() {
-  return array('oai_dc', 'mods', 'oai_lom', 'oai_lre', 'oai_ilox');
+  return array('oai_dc', 'oai_etdms', 'oai_ilox', 'oai_lom', 'oai_lre', 'mods');
 }
 
 /**

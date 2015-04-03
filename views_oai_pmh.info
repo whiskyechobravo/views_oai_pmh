@@ -10,6 +10,7 @@ files[] = includes/request.inc
 files[] = includes/format.inc
 files[] = includes/formats/mods.inc
 files[] = includes/formats/oai_dc.inc
+files[] = includes/formats/oai_etdms.inc
 files[] = includes/formats/oai_ilox.inc
 files[] = includes/formats/oai_lom.inc
 files[] = includes/formats/oai_lre.inc

@@ -9,10 +9,12 @@ Drupal.
 The following metadata formats are supported:
 
 * Dublin Core (oai_dc)
-* Metadata Object Description Schema (mods)
+* IMS Learning Objects Exchange (oai_ilox)
+* Interoperability Metadata Standard for Electronic Theses and Dissertations
+  (oai_etdms)
 * Learning Objects Metadata (oai_lom)
 * Learning Resource Exchange (oai_lre)
-* IMS Learning Objects Exchange (oai_ilox)
+* Metadata Object Description Schema (mods)
 
 Other modules may provide their own metadata formats by implementing Drupal-
 style hooks.
