@@ -46,6 +46,7 @@ class views_oai_pmh_format_oai_etdms extends views_oai_pmh_format {
       'dc:relation'       => array('lang', 'translated', 'scheme'),
       'dc:rights'         => array('lang', 'translated', 'scheme'),
       'dc:source'         => array('lang', 'translated', 'scheme'),
+      'dc:subject'        => array('lang', 'translated', 'scheme'),
       'dc:title'          => array('lang', 'translated', 'scheme'),
       'dc:type'           => array('lang', 'translated', 'scheme'),
       'degree/discipline' => array('lang', 'translated', 'scheme'),
