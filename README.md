@@ -370,8 +370,8 @@ argument is an object of class `views_oai_pmh_format`. The implementor may
 check that object's `id` attribute to identify the format.
 
 
-Projet home
------------
+Project home
+------------
 
 This project's home is:
 
