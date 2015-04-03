@@ -128,9 +128,10 @@ function views_oai_pmh_views_default_views() {
   $handler->display->display_options['style_options']['enabled_formats'] = array(
     'oai_dc' => 'oai_dc',
     'mods' => 0,
+    'oai_etdms' => 0,
+    'oai_ilox' => 0,
     'oai_lom' => 0,
     'oai_lre' => 0,
-    'oai_ilox' => 0,
   );
   $handler->display->display_options['style_options']['field_mappings'] = array(
     'oai_dc' => array(
@@ -157,6 +158,30 @@ function views_oai_pmh_views_default_views() {
       'biblio_secondary_title' => 'none',
       'biblio_url' => 'none',
     ),
+    'oai_etdms' => array(
+      'title' => 'none',
+      'biblio_authors' => 'none',
+      'biblio_corp_authors' => 'none',
+      'biblio_isbn' => 'none',
+      'biblio_keywords' => 'none',
+      'biblio_year' => 'none',
+      'biblio_lang' => 'none',
+      'biblio_publisher' => 'none',
+      'biblio_secondary_title' => 'none',
+      'biblio_url' => 'none',
+    ),
+    'oai_ilox' => array(
+      'title' => 'none',
+      'biblio_authors' => 'none',
+      'biblio_corp_authors' => 'none',
+      'biblio_isbn' => 'none',
+      'biblio_keywords' => 'none',
+      'biblio_year' => 'none',
+      'biblio_lang' => 'none',
+      'biblio_publisher' => 'none',
+      'biblio_secondary_title' => 'none',
+      'biblio_url' => 'none',
+    ),
     'oai_lom' => array(
       'title' => 'none',
       'biblio_authors' => 'none',
@@ -170,18 +195,6 @@ function views_oai_pmh_views_default_views() {
       'biblio_url' => 'none',
     ),
     'oai_lre' => array(
-      'title' => 'none',
-      'biblio_authors' => 'none',
-      'biblio_corp_authors' => 'none',
-      'biblio_isbn' => 'none',
-      'biblio_keywords' => 'none',
-      'biblio_year' => 'none',
-      'biblio_lang' => 'none',
-      'biblio_publisher' => 'none',
-      'biblio_secondary_title' => 'none',
-      'biblio_url' => 'none',
-    ),
-    'oai_ilox' => array(
       'title' => 'none',
       'biblio_authors' => 'none',
       'biblio_corp_authors' => 'none',
