@@ -325,18 +325,13 @@ create a new one, then add the required fields and configure the mappings.
 Theming and templating
 ----------------------
 
-It is possible to create field templates. This might be useful in some cases
-where custom formatting of the field values is needed. You may find the
-appropriate template filename by clicking on **Other > Theme > Information** in
-your view, and locating the field in the list. However, you cannot provide any
-XML markup in those templates, as their output will be escaped before inclusion
-into the XML document.
-
-If you need to manipulate the XML document, you may implement the
+To manipulate the output before it gets rendered as XML, you may implement the
 "views_oai_pmh_response" theme hook in your theme. This function receives,
 among other arguments, a PHP DOMDocument object containing the XML tree of the
 OAI-PMH response. For more details, see the default implementation,
 `theme_views_oai_pmh_response()`, in views_oai_pmh.theme.inc.
+
+Field templates are not supported.
 
 
 Implementing new metadata formats
