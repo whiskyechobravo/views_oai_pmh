@@ -266,6 +266,7 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
       // TODO: 'compression' => 'gzip',
     );
     $this->xml_append_children($this->xml_verb, $elements);
+    $this->append_oai_identifier_description($this->xml_verb);
   }
 
   /**
@@ -345,6 +346,27 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
     else {
       $this->request->errors[] = new views_oai_pmh_error_no_records_match();
     }
+  }
+
+  protected function append_oai_identifier_description($parent) {
+    $description_element = $this->xml->createElement('description');
+    $parent->appendChild($description_element);
+
+    $oai_identifier_element = $this->xml->createElementNS('http://www.openarchives.org/OAI/2.0/oai-identifier', 'oai-identifier');
+    $oai_identifier_attributes = array(
+      'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+      'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai-identifier  http://www.openarchives.org/OAI/2.0/oai-identifier.xsd',
+    );
+    $this->xml_set_attributes($oai_identifier_element, $oai_identifier_attributes);
+    $description_element->appendChild($oai_identifier_element);
+
+    $elements = array(
+      'scheme' => 'oai',
+      'repositoryIdentifier' => $this->request->get_host(),
+      'delimiter' => ':',
+      'sampleIdentifier' => $this->make_record_identifier(VIEWS_OAI_PMH_SAMPLE_IDENTIFIER),
+    );
+    $this->xml_append_children($oai_identifier_element, $elements);
   }
 
   protected function append_record_header($parent, $row_index, $row) {

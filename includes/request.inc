@@ -96,9 +96,12 @@ class views_oai_pmh_request {
     }
   }
 
+  public function get_host() {
+    return parse_url($this->base_url)['host'];
+  }
+
   public function make_record_identifier_prefix() {
-    $url_parts = parse_url($this->base_url);
-    return 'oai:' . $url_parts['host'] . ':';
+    return 'oai:' . $this->get_host() . ':';
   }
 
   /**
