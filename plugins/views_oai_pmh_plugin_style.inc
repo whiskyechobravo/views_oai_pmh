@@ -60,15 +60,27 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
       '#options' => $format_options,
     );
     $form['enabled_formats']['oai_dc']['#disabled'] = TRUE; // 'oai_dc' is read-only.
+    $form['metadata_prefix'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Metadata prefixes'),
+    );
 
     // Add mapping selectors.
     $fields = $this->display->handler->get_option('fields');
     $field_labels = $this->display->handler->get_field_labels();
     foreach ($formats as $id) {
       $format = views_oai_pmh_get_metadata_format($id);
+      $form['metadata_prefix'][$id] = array(
+        '#type' => 'textfield',
+        '#title' => $format->label,
+        '#default_value' => $this->options['metadata_prefix'][$id] ? $this->options['metadata_prefix'][$id] : $id,
+        '#required' => TRUE,
+        '#size' => 16,
+        '#maxlength' => 32,
+      );
       $form['field_mappings'][$id] = array(
         '#type' => 'fieldset',
-        '#title' => $format->label,
+        '#title' => t('Field mappings for <em>@format</em>', array('@format' => $format->label)),
         '#theme' => 'views_oai_pmh_field_mappings_form',
         '#states' => array(
           'visible' => array(
@@ -85,10 +97,27 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
         );
       }
     }
+    $form['metadata_prefix']['oai_dc']['#disabled'] = TRUE; // Metadata prefix for 'oai_dc' is read-only.
   }
 
   function options_validate(&$form, &$form_state) {
     $form_state['values']['style_options']['enabled_formats']['oai_dc'] = 'oai_dc'; // 'oai_dc' is always on.
+    $form_state['values']['style_options']['metadata_prefix']['oai_dc'] = 'oai_dc'; // 'oai_dc' is read-only.
+
+    foreach ($form_state['values']['style_options']['metadata_prefix'] as $id1 => $metadata_prefix1) {
+      // Check for invalid metadata prefixes.
+      if (!preg_match("/^[A-Za-z0-9\-_\.!~\*'\(\)]+$/", $metadata_prefix1)) {  // Regex based on http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd.
+        form_error($form['metadata_prefix'][$id1], t("The metadata prefix '@prefix' contains characters that are not allowed in metadata prefixes.", array('@prefix' => $metadata_prefix1)));
+      }
+
+      // Check for duplicate metadata prefixes.
+      foreach ($form_state['values']['style_options']['metadata_prefix'] as $id2 => $metadata_prefix2) {
+        if ($metadata_prefix1 == $metadata_prefix2 && $id1 != $id2) {
+          form_error($form['metadata_prefix'][$id2], t("Metadata prefix '@prefix' is not unique.", array('@prefix' => $metadata_prefix1)));
+        }
+      }
+    }
+
     parent::options_validate($form, $form_state);
   }
 
@@ -99,7 +128,7 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
       // Initialize the request from URL arguments.
       $this->request = new views_oai_pmh_request(
         $base_url . base_path() . $this->display->handler->get_path(),
-        array_filter($this->options['enabled_formats']),
+        $this->get_metadata_prefixes(),
         isset($this->view->live_preview) && $this->view->live_preview);
     }
 
@@ -235,7 +264,7 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
         $this->view->query->pager->set_current_page($cache->data['current_page'] + 1);
 
         // Restore some of the request data.
-        $this->request->metadata_format = views_oai_pmh_get_metadata_format($cache->data['metadata_prefix']);
+        $this->request->metadata_format = views_oai_pmh_get_metadata_format($cache->data['metadata_format']);
         return;
       }
     }
@@ -278,18 +307,18 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
   protected function list_metadata_formats_render() {
     $this->xml_append_verb();
 
-    $formats = views_oai_pmh_list_metadata_formats();
-    $enabled_formats = array_filter($this->options['enabled_formats']);
-    foreach (array_intersect($formats, $enabled_formats) as $id) {
-      $format = views_oai_pmh_get_metadata_format($id);
-      $format_element = $this->xml->createElement('metadataFormat');
-      $this->xml_verb->appendChild($format_element);
-      $elements = array(
-        'metadataPrefix' => $format->id,
-        'schema' => $format->schema,
-        'metadataNamespace' => $format->get_metadata_namespace(),
-      );
-      $this->xml_append_children($format_element, $elements);
+    $enabled_formats = $this->get_metadata_prefixes();
+    foreach ($enabled_formats as $metadata_prefix => $format_id) {
+      if ($format = views_oai_pmh_get_metadata_format($format_id)) {
+        $format_element = $this->xml->createElement('metadataFormat');
+        $this->xml_verb->appendChild($format_element);
+        $elements = array(
+          'metadataPrefix' => $metadata_prefix,
+          'schema' => $format->schema,
+          'metadataNamespace' => $format->get_metadata_namespace(),
+        );
+        $this->xml_append_children($format_element, $elements);
+      }
     }
   }
 
@@ -603,7 +632,7 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
         // Save token to database.
         $data = array(
           'verb' => $this->request->verb,
-          'metadata_prefix' => $this->request->metadata_format->id,
+          'metadata_format' => $this->request->metadata_format->id,
           'query' => $this->view->query,
           'current_page' => $current_page,
         );
@@ -715,8 +744,8 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
   // Internal utility methods.
   //
 
-  protected function make_record_identifier($id) {
-    return $this->request->make_record_identifier_prefix() . $id;
+  protected function make_record_identifier($entity_id) {
+    return $this->request->make_record_identifier_prefix() . $entity_id;
   }
 
   /**
@@ -741,5 +770,35 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
     }
     return array('', FALSE);
   }
-}
 
+  /**
+   * Returns an array with all the enabled metadata formats, keyed by metadata
+   * prefix.
+   */
+  protected function get_metadata_prefixes() {
+    $enabled = array();
+    foreach ($this->options['enabled_formats'] as $id) {
+      // If format $id is enabled.
+      if ($id) {
+        // Add its metadata prefix.
+        $enabled[$this->get_metadata_prefix($id)] = $id;
+      }
+    }
+    return $enabled;
+  }
+
+  /**
+   * Get the metadata prefix corresponding to the given metadata format id,
+   * based on the plugin's settings.
+   */
+  protected function get_metadata_prefix($format_id) {
+    if (isset($this->options['metadata_prefix'])) {
+      return $this->options['metadata_prefix'][$format_id];
+    }
+    else {
+      // Prefix settings are missing. We're probably dealing with a view that
+      // was created before the setting existed.
+      return $format_id;
+    }
+  }
+}

@@ -50,6 +50,7 @@ Changes:
   and Dissertations (ETD-MS) format.
 * Include the `oai-identifier` description container in response to "Identify"
   requests.
+* Metadata prefixes are now configurable.
 * Properly output the view's URL instead of the site's base URL in `<request>`
   tags.
 * All errors are now detected and reported in the response, as required by the
@@ -147,20 +148,22 @@ required.
    the "OAI-PMH Style options", where you'll find the mapping interface.
 8. Enable the desired metadata formats for your new OAI-PMH endpoint. The
    Dublin Core (oai_dc) format is mandatory.
-9. For each enabled format, a table is provided where you may associate each
-   field that's been added to the display with an element in that metadata
-   format. For example, in the "Dublin Core" table you could associate the
-   "Content: Title" field with the "dc:title" element, the "Content: Body" with
-   the "dc:description" element, and the "Content: Post date" with the
-   "dc:date" element.
-10. Configure a path for this display, such as "my-oai-pmh", in the "OAI-PMH
+9. If desired, edit the metadata prefixes that will be recognized by your OAI-
+   PMH endpoint. Note that each prefix must be unique.
+10. For each enabled format, a table is provided where you may associate each
+    field that's been added to the display with an element in that metadata
+    format. For example, in the "Field mappings for Dublin Core" table you
+    could associate the "Content: Title" field with the "dc:title" element, the
+    "Content: Body" with the "dc:description" element, and the "Content: Post
+    date" with the "dc:date" element.
+11. Configure a path for this display, such as "my-oai-pmh", in the "OAI-PMH
     Settings" section.
-11. In the "Pager" section, make sure to use the "Full" pager. The specified
+12. In the "Pager" section, make sure to use the "Full" pager. The specified
     number of items per page will control how many records will appear in an
     OAI-PMH response (harvesters will make multiple requests using resumption
     tokens to get more records).
-12. Save the view.
-13. Optionally, you can test your new endpoint by going to
+13. Save the view.
+14. Optionally, you can test your new endpoint by going to
     http://re.cs.uct.ac.za/ and entering the absolute URL for your display,
     e.g. http://example.com/my-oai-pmh, in the "Enter the OAI baseURL" box, and
     then clicking the "Test the specified/selected baseURL" link (on the right

@@ -12,6 +12,7 @@ class views_oai_pmh_request {
   public $base_url = ''; // The base URL of this OAI-PMH request.
   public $verb = '';
   public $callback = ''; // Name of the style plugin callback corresponding to $verb.
+  public $metadata_prefix = '';
   public $metadata_format; // A views_oai_pmh_metadata_format object.
   public $resumption_token = '';
   public $nid = 0;
@@ -30,7 +31,7 @@ class views_oai_pmh_request {
   /**
    * Constructs the object based on $_REQUEST data.
    */
-  function __construct($base_url, $allowed_metadata_formats, $live_preview = FALSE) {
+  function __construct($base_url, $allowed_metadata_prefixes, $live_preview = FALSE) {
     $this->base_url = $base_url;
 
     if ($live_preview) {
@@ -73,19 +74,19 @@ class views_oai_pmh_request {
         case 'ListIdentifiers':
           $this->callback = 'list_identifiers';
           $this->parse_arguments($args, array('metadataPrefix'), array('resumptionToken', 'from', 'until', 'set'));
-          $this->parse_metadata_prefix($args, $allowed_metadata_formats);
+          $this->parse_metadata_prefix($args, $allowed_metadata_prefixes);
           break;
 
         case 'GetRecord':
           $this->callback = 'get_record';
           $this->parse_arguments($args, array('identifier', 'metadataPrefix'));
-          $this->parse_metadata_prefix($args, $allowed_metadata_formats);
+          $this->parse_metadata_prefix($args, $allowed_metadata_prefixes);
           break;
 
         case 'ListRecords':
           $this->callback = 'list_records';
           $this->parse_arguments($args, array('metadataPrefix'), array('resumptionToken', 'from', 'until', 'set'));
-          $this->parse_metadata_prefix($args, $allowed_metadata_formats);
+          $this->parse_metadata_prefix($args, $allowed_metadata_prefixes);
           break;
 
         case 'ListSets':
@@ -218,11 +219,12 @@ class views_oai_pmh_request {
    * Checks that the metadataPrefix argument matches a supported metadata
    * format.
    */
-  protected function parse_metadata_prefix($args, $allowed_metadata_formats) {
+  protected function parse_metadata_prefix($args, $metadata_prefixes) {
     if (isset($args['metadataPrefix'])) {
-      if (in_array($args['metadataPrefix'], $allowed_metadata_formats)
-        && in_array($args['metadataPrefix'], views_oai_pmh_list_metadata_formats())) {
-        $this->metadata_format = views_oai_pmh_get_metadata_format($args['metadataPrefix']);
+      if (isset($metadata_prefixes[$args['metadataPrefix']])
+        && in_array($metadata_prefixes[$args['metadataPrefix']], views_oai_pmh_list_metadata_formats())) {
+        $this->metadata_format = views_oai_pmh_get_metadata_format($metadata_prefixes[$args['metadataPrefix']]);
+        $this->metadata_prefix = $args['metadataPrefix'];
         return;
       }
       $this->errors[] = new views_oai_pmh_error_cannot_disseminate_format($args['metadataPrefix']);
