@@ -538,7 +538,10 @@ class views_oai_pmh_plugin_style extends views_plugin_style {
                 $attribute_value = $attribute_values[$delta];
               }
             }
-            $element_node->setAttribute($attribute_name, check_plain($attribute_value));
+            $attribute_value = trim($attribute_value);
+            if (!$attribute_field->options['hide_empty'] || !empty($attribute_value)) {
+              $element_node->setAttribute($attribute_name, check_plain($attribute_value));
+            }
             $used_attributes[$attribute_name] = TRUE;
 
             // Remove this attribute from the available ones before proceeding with the remainder of the path.

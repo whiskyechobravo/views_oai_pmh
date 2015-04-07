@@ -133,7 +133,7 @@ required.
      the OAI-PMH output and will simply be ignored. You may still want to use
      labels for documentation purposes though.
    * In the "No results behavior" section, the "Hide if empty" option must be
-     checked to avoid empty XML tags in the output.
+     checked to avoid empty XML tags or attributes in the output.
    * In the "Rewrite results" section, check the "Strip HTML tags" option. HTML
      markup is not allowed in OAI-PMH elements.
    * Title fields must have the "Link this field to the original piece of
