@@ -84,10 +84,14 @@ Required packages:
 
 * [Drupal 7.x](https://www.drupal.org/project/drupal)
 * [Views 7.x-3.x](https://www.drupal.org/project/views)
+* [CELL OAI-PMH](https://github.com/whiskyechobravo/cell_oai_pmh)
+This Drupal 7 module extends the Views OAI-PMH module for the needs of the Consortium on Electronic Literature (CELL)'s OAI-PMH metadata sharing project. (If you don't install this module, the proper <extension> subelements will not be available in your view.)
 
 Optional packages:
 
 * [Biblio 7.x-1.x](https://www.drupal.org/project/biblio)
+
+
 
 
 Installing the module
